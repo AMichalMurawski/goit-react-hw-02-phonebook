@@ -1,9 +1,17 @@
+import { Component } from 'react';
 
+export class ContactList extends Component {
+  render() {
+    const contacts = this.props.contacts;
 
-export const ContactList = ({contacts}) => (
-    <ul>
+    return (
+      <ul>
         {contacts.map(contact => (
-            <li key={contact.id}>{contact.name}: {contact.number}</li>
+          <li key={contact.id}>
+            {contact.name}: {contact.number}
+          </li>
         ))}
-    </ul>
-)
+      </ul>
+    );
+  }
+}
