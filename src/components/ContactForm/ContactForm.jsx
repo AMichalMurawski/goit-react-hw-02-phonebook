@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
 
-const initialValue = { name: '', number: '' };
+const initialValue = { name: 'Rosie Simpson', number: '1313123123' };
 
 export class ContactForm extends Component {
   state = { ...initialValue };
