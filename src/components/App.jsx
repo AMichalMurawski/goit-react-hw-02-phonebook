@@ -2,27 +2,25 @@ import { Component } from 'react';
 import { ContactForm } from './ContactForm/ContactForm';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
-
-const phoneList = [
-  {id: 'id-1', name: 'Rosie Simpson', number: '459-12-56'},
-  {id: 'id-2', name: 'Hermione Kline', number: '443-89-12'},
-  {id: 'id-3', name: 'Eden Clements', number: '645-17-79'},
-  {id: 'id-4', name: 'Annie Copeland', number: '227-91-26'},
-];
+import { ContactItem } from './ContactItem/ContactItem';
 
 export class App extends Component {
   state = {
-    contacts: phoneList,
-    filter: "",
+    contacts: [],
+    filter: '',
   };
 
   handleSubmit = contact => {
     const { contacts } = this.state;
     if (
-      contacts.find(value => value.name.toLowerCase().replace(/\s/g, "")
-      === contact.name.toLowerCase().replace(/\s/g, ""))) {
-        alert(`${contact.name} is already in contacts.`)
-        return
+      contacts.find(
+        value =>
+          value.name.toLowerCase().replace(/\s/g, '') ===
+          contact.name.toLowerCase().replace(/\s/g, '')
+      )
+    ) {
+      alert(`${contact.name} is already in contacts.`);
+      return true;
     }
     this.setState(prevState => ({
       contacts: [...prevState.contacts, contact],
@@ -33,45 +31,76 @@ export class App extends Component {
     this.setState(prevState => ({
       filter: value,
     }));
-  }
+  };
 
   deleteContact = id => {
-    const { contacts } = this.state
-    const index = contacts.findIndex(contact => contact.id === id)
-    contacts.splice(index, 1)
+    const { contacts } = this.state;
+    const index = contacts.findIndex(contact => contact.id === id);
+    contacts.splice(index, 1);
     this.setState(prevState => ({
       contacts,
     }));
-  }
+  };
 
   render() {
     const { contacts, filter } = this.state;
     let contactList = [];
     if (filter.length > 0) {
       contactList = contacts.filter((contact, index, array) => {
-        return contact.name.toLowerCase().replace(/\s/g, "").includes(filter.toLowerCase().replace(/\s/g, ""))
-      })
+        return contact.name
+          .toLowerCase()
+          .replace(/\s/g, '')
+          .includes(filter.toLowerCase().replace(/\s/g, ''));
+      });
     } else {
-      contactList = contacts
+      contactList = contacts;
     }
 
     return (
       <div
         style={{
-          height: '100vh',
+          margin: '0 auto',
           display: 'flex',
+          width: '50%',
           flexDirection: 'column',
           justifyContent: 'center',
-          alignItems: 'center',
+          alignItems: 'start',
           fontSize: 40,
           color: '#010101',
         }}
       >
-        <h2>Phonebook</h2>
+        <h2
+          style={{
+            fontWeight: 700,
+            paddingTop: 40,
+            paddingBottom: 40,
+          }}
+        >
+          Phonebook
+        </h2>
         <ContactForm onSubmit={values => this.handleSubmit(values)} />
-        <h2>Contacts </h2>
-        <Filter filter={filter} handleChange={value => this.changeFilter(value)} />
-        <ContactList contacts={contactList} onClick={id => this.deleteContact(id)} />
+        <h2
+          style={{
+            fontWeight: 700,
+            paddingTop: 40,
+            paddingBottom: 40,
+          }}
+        >
+          Contacts{' '}
+        </h2>
+        <Filter
+          filter={filter}
+          handleChange={value => this.changeFilter(value)}
+        />
+        <ContactList>
+          {contactList.map(contact => (
+            <ContactItem
+              key={contact.id}
+              contact={contact}
+              onClick={id => this.deleteContact(id)}
+            />
+          ))}
+        </ContactList>
       </div>
     );
   }
