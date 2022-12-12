@@ -20,9 +20,9 @@ export class App extends Component {
     const { contacts } = this.state;
     if (
       contacts.find(value => value.name.toLowerCase().replace(/\s/g, "")
-        === contact.name.toLowerCase().replace(/\s/g, ""))) {
-      alert(`${contact.name} is already in contacts.`)
-      return
+      === contact.name.toLowerCase().replace(/\s/g, ""))) {
+        alert(`${contact.name} is already in contacts.`)
+        return
     }
     this.setState(prevState => ({
       contacts: [...prevState.contacts, contact],
@@ -30,8 +30,17 @@ export class App extends Component {
   };
 
   changeFilter = value => {
-     this.setState(prevState => ({
+    this.setState(prevState => ({
       filter: value,
+    }));
+  }
+
+  deleteContact = id => {
+    const { contacts } = this.state
+    const index = contacts.findIndex(contact => contact.id === id)
+    contacts.splice(index, 1)
+    this.setState(prevState => ({
+      contacts,
     }));
   }
 
@@ -62,7 +71,7 @@ export class App extends Component {
         <ContactForm onSubmit={values => this.handleSubmit(values)} />
         <h2>Contacts </h2>
         <Filter filter={filter} handleChange={value => this.changeFilter(value)} />
-        <ContactList contacts={contactList} />
+        <ContactList contacts={contactList} onClick={id => this.deleteContact(id)} />
       </div>
     );
   }
